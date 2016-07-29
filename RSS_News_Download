@@ -32,6 +32,8 @@
 #  (/home/irlp/custom/RSS_News_Download > /home/irlp/custom/download.out 2>&1)  #
 #     and an appropriate time and date line, such as: 09 30 * * 6               #
 #                                                                               #
+#   29-July-2016 Added a test and clear of the 'bad download' flag              #
+#                                                                               #
 #################################################################################
 # This script relies on functions in "my-functions.sh".
 # Make sure we are user repeater!!!
@@ -50,7 +52,7 @@ fi
 #
 # Setup the email addresses that notifications will be sent too.
 # Use a , between addresses
-EMAIL="xxx@gmail.com, xxx@gmail.com"  
+EMAIL="xxx@gmail.com, yyy@gmail.com"  
 
 # Names of those emailed
 NAMES="Dave, Mal"      
@@ -72,6 +74,12 @@ START_TIME=$(date +%H:%M:%S)
 writelog2 "Commence news download"
 echo "Hi $NAMES,"
 echo -e "The RSS download was kicked off at $START_TIME.\n"
+
+# Clear the bad_download flag if it was previously set
+# Note: This flag is only set by the 'old' download script
+if [ -f $NEWSDIR/bad_download ] ; then
+  rm -f $NEWSDIR/bad_download
+fi
 
 # Test output directory exists
 if [ ! -d $NEWSDIR ] ; then 
